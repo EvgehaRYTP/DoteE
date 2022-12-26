@@ -1,0 +1,41 @@
+Проблема с ускорением и торможени
+
+Когда зажата клавиша, спрайту дается ускорение в направлении мышки, когда отпускается, то спрайт должен не резко тормозить, а постепенно в направлении куда он двигался, даже если повернуть в другую сторону.
+И с этим у меня проблема. В addForces есть проверка на нажатие клавишы(movable вызывается в классе игры если клавиша нажата) и как я думаю, нужно добавить проверку и обнулять, но тогда тормозить начнет резко.
+Помогите пожалуйста правильно сделать
+
+код addForces:
+
+void Player::addForces(sf::Vector2f _forces)
+{
+	if (movable)
+	{
+		//_forces /= 2.f;
+		velocity += _forces;
+
+	if (!movable)
+	{
+		velocity -= _forces;
+	}
+}
+
+void Player::setMovable(bool _movable)
+{
+	movable = _movable;
+}
+
+void Player::setRotation(Vector2f raznica)
+{
+	playerSprite.setRotation(std::atan2(raznica.y, raznica.x) * 180.f / 3.14f);
+}
+
+
+void Player::move(sf::Time dt, Vector2f test)
+{
+	direction.x = cos(((getRotation()) / 360) * 3.1426f * 2);
+	direction.y = sin(((getRotation()) / 360) * 3.1416f * 2);
+
+	addForces(direction * 1.5f);
+
+	playerSprite.move(velocity * dt.asSeconds());
+}
